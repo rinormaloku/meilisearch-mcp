@@ -257,10 +257,11 @@ class MeilisearchMCPServer:
                     )]
 
                 elif name == "list-indexes":
-                    indexes = await self.meili_client.indexes.list_indexes()
+                    indexes = await self.meili_client.get_indexes()
+                    formatted_json = json.dumps(indexes, indent=2)
                     return [types.TextContent(
                         type="text",
-                        text=f"Available indexes: {indexes}"
+                        text=f"Indexes:\n{formatted_json}"
                     )]
 
                 elif name == "get-documents":
@@ -289,7 +290,7 @@ class MeilisearchMCPServer:
                     is_healthy = await self.meili_client.health_check()
                     return [types.TextContent(
                         type="text",
-                        text=f"Meilisearch health status: {'healthy' if is_healthy else 'unhealthy'}"
+                        text=f"Meilisearch is {is_healthy and 'available' or 'unavailable'}"
                     )]
             
                 elif name == "get-version":
