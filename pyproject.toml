@@ -1,5 +1,5 @@
 [project]
-name = "meilisearch-mcp-server"
+name = "meilisearch-mcp"
 version = "0.1.0"
 description = "MCP server for Meilisearch"
 requires-python = ">=3.10"
