@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 from typing import Optional, Dict, Any, List, Union
+from datetime import datetime
 import mcp.types as types
 from mcp.server import Server, NotificationOptions
 from mcp.server.models import InitializationOptions
@@ -11,6 +12,13 @@ from .client import MeilisearchClient
 from .logging import MCPLogger
 
 logger = MCPLogger()
+
+
+def json_serializer(obj: Any) -> str:
+    """Custom JSON serializer for objects not serializable by default json code"""
+    if isinstance(obj, datetime):
+        return obj.isoformat()
+    return str(obj)
 
 
 def create_server(url: str = "http://localhost:7700", api_key: Optional[str] = None) -> "MeilisearchMCPServer":
@@ -243,7 +251,7 @@ class MeilisearchMCPServer:
 
                 elif name == "list-indexes":
                     indexes = await self.meili_client.get_indexes()
-                    formatted_json = json.dumps(indexes, indent=2)
+                    formatted_json = json.dumps(indexes, indent=2, default=json_serializer)
                     return [
                         types.TextContent(
                             type="text", text=f"Indexes:\n{formatted_json}"
@@ -386,7 +394,7 @@ class MeilisearchMCPServer:
                     return [
                         types.TextContent(
                             type="text",
-                            text=f"Health status: {json.dumps(status.__dict__, default=str)}",
+                            text=f"Health status: {json.dumps(status.__dict__, default=json_serializer)}",
                         )
                     ]
 
@@ -401,7 +409,7 @@ class MeilisearchMCPServer:
                     )
                     return [
                         types.TextContent(
-                            type="text", text=f"Index metrics: {metrics.__dict__}"
+                            type="text", text=f"Index metrics: {json.dumps(metrics.__dict__, default=json_serializer)}"
                         )
                     ]
 
