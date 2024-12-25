@@ -44,8 +44,7 @@ class MeilisearchClient:
 
     async def get_stats(self) -> Dict[str, Any]:
         """Get database stats"""
-        # return self.client.get_stats()
-        return "This method has not yet been implemented in the Meilisearch client."
+        return self.client.get_all_stats()
 
     async def get_indexes(self) -> Dict[str, Any]:
         """Get all indexes"""
