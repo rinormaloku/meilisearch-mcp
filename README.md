@@ -8,6 +8,7 @@ A Model Context Protocol (MCP) server for interacting with Meilisearch through L
 - Settings configuration with templates for common use cases (e-commerce, content search, SaaS)
 - Task monitoring and API key management
 - Built-in logging and monitoring tools
+- Dynamic connection configuration to switch between Meilisearch instances
 
 ## Installation
 
@@ -33,8 +34,32 @@ uv pip install -e .
 ### Environment Variables
 
 ```bash
-MEILI_HTTP_ADDR=http://localhost:7700  # Meilisearch URL
-MEILI_MASTER_KEY=your_master_key       # Optional: Meilisearch API key
+MEILI_HTTP_ADDR=http://localhost:7700  # Default Meilisearch URL
+MEILI_MASTER_KEY=your_master_key       # Optional: Default Meilisearch API key
+```
+
+### Dynamic Connection Configuration
+
+The server provides tools to view and update connection settings at runtime:
+
+- `get-connection-settings`: View current connection URL and API key status
+- `update-connection-settings`: Update URL and/or API key to connect to a different Meilisearch instance
+
+Example usage through MCP:
+```json
+// Get current settings
+{
+  "name": "get-connection-settings"
+}
+
+// Update connection settings
+{
+  "name": "update-connection-settings",
+  "arguments": {
+    "url": "http://new-host:7700",
+    "api_key": "new-api-key"
+  }
+}
 ```
 
 ### Running the Server
