@@ -5,7 +5,7 @@ A Model Context Protocol (MCP) server for interacting with Meilisearch through L
 ## Features
 
 - Index and document management 
-- Settings configuration with templates for common use cases (e-commerce, content search, SaaS)
+- Settings configuration and management
 - Task monitoring and API key management
 - Built-in logging and monitoring tools
 - Dynamic connection configuration to switch between Meilisearch instances
@@ -78,7 +78,7 @@ npx @modelcontextprotocol/inspector python -m src.meilisearch_mcp
 
 - Index Management: create/update/delete indexes
 - Document Operations: add/update/delete documents
-- Settings Management: configure search settings with templates
+- Settings Management: configure search settings
 - API Key Management: create/update/delete API keys
 - Task Monitoring: track and manage asynchronous tasks
 - System Monitoring: health checks and metrics

@@ -6,7 +6,6 @@ from .indexes import IndexManager
 from .documents import DocumentManager
 from .tasks import TaskManager
 from .settings import SettingsManager
-from .templates import ConfigTemplates
 from .keys import KeyManager
 from .logging import MCPLogger
 from .monitoring import MonitoringManager
@@ -25,7 +24,6 @@ class MeilisearchClient:
         self.indexes = IndexManager(self.client)
         self.documents = DocumentManager(self.client)
         self.settings = SettingsManager(self.client)
-        self.templates = ConfigTemplates()
         self.tasks = TaskManager(self.client)
         self.keys = KeyManager(self.client)
         self.monitoring = MonitoringManager(self.client)
