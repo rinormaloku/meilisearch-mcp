@@ -9,6 +9,7 @@ A Model Context Protocol (MCP) server for interacting with Meilisearch through L
 - Task monitoring and API key management
 - Built-in logging and monitoring tools
 - Dynamic connection configuration to switch between Meilisearch instances
+- Smart search across single or multiple indices
 
 ## Installation
 
@@ -62,6 +63,43 @@ Example usage through MCP:
 }
 ```
 
+### Search Functionality
+
+The server provides a flexible search tool that can search across one or all indices:
+
+- `search`: Search through Meilisearch indices with optional parameters
+
+Example usage through MCP:
+```json
+// Search in a specific index
+{
+  "name": "search",
+  "arguments": {
+    "query": "search term",
+    "indexUid": "movies",
+    "limit": 10
+  }
+}
+
+// Search across all indices
+{
+  "name": "search",
+  "arguments": {
+    "query": "search term",
+    "limit": 5,
+    "sort": ["releaseDate:desc"]
+  }
+}
+```
+
+Available search parameters:
+- `query`: The search query (required)
+- `indexUid`: Specific index to search in (optional)
+- `limit`: Maximum number of results per index (optional, default: 20)
+- `offset`: Number of results to skip (optional, default: 0)
+- `filter`: Filter expression (optional)
+- `sort`: Sorting rules (optional)
+
 ### Running the Server
 
 ```bash
@@ -82,6 +120,7 @@ npx @modelcontextprotocol/inspector python -m src.meilisearch_mcp
 - API Key Management: create/update/delete API keys
 - Task Monitoring: track and manage asynchronous tasks
 - System Monitoring: health checks and metrics
+- Search: flexible search across single or multiple indices
 
 ## Contributing
 
