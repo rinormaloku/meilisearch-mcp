@@ -39,9 +39,21 @@ class MeilisearchMCPServer:
             log_dir = os.path.expanduser("~/.meilisearch-mcp/logs")
 
         self.logger = MCPLogger("meilisearch-mcp", log_dir)
+        self.url = url
+        self.api_key = api_key
         self.meili_client = MeilisearchClient(url, api_key)
         self.server = Server("meilisearch")
         self._setup_handlers()
+
+    async def update_connection(self, url: Optional[str] = None, api_key: Optional[str] = None):
+        """Update connection settings and reinitialize client if needed"""
+        if url:
+            self.url = url
+        if api_key:
+            self.api_key = api_key
+        
+        self.meili_client = MeilisearchClient(self.url, self.api_key)
+        self.logger.info("Updated Meilisearch connection settings", url=self.url)
 
     def _setup_handlers(self):
         """Setup MCP request handlers"""
@@ -50,6 +62,22 @@ class MeilisearchMCPServer:
         async def handle_list_tools() -> list[types.Tool]:
             """List available tools"""
             return [
+                types.Tool(
+                    name="get-connection-settings",
+                    description="Get current Meilisearch connection settings",
+                    inputSchema={"type": "object", "properties": {}},
+                ),
+                types.Tool(
+                    name="update-connection-settings",
+                    description="Update Meilisearch connection settings",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "url": {"type": "string", "optional": True},
+                            "api_key": {"type": "string", "optional": True},
+                        },
+                    },
+                ),
                 types.Tool(
                     name="health-check",
                     description="Check Meilisearch server health",
@@ -241,7 +269,27 @@ class MeilisearchMCPServer:
         ) -> list[types.TextContent]:
             """Handle tool execution"""
             try:
-                if name == "create-index":
+                if name == "get-connection-settings":
+                    return [
+                        types.TextContent(
+                            type="text",
+                            text=f"Current connection settings:\nURL: {self.url}\nAPI Key: {'*' * 8 if self.api_key else 'Not set'}",
+                        )
+                    ]
+
+                elif name == "update-connection-settings":
+                    await self.update_connection(
+                        arguments.get("url"),
+                        arguments.get("api_key")
+                    )
+                    return [
+                        types.TextContent(
+                            type="text",
+                            text=f"Successfully updated connection settings to URL: {self.url}",
+                        )
+                    ]
+
+                elif name == "create-index":
                     result = await self.meili_client.indexes.create_index(
                         arguments["uid"], arguments.get("primaryKey")
                     )

@@ -81,7 +81,7 @@ class MonitoringManager:
         """Get system-level information"""
         try:
             version = self.client.get_version()
-            stats = self.client.get_stats()
+            stats = self.client.get_all_stats()
 
             return {
                 "version": version,
