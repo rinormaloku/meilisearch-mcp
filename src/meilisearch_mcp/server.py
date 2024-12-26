@@ -158,21 +158,6 @@ class MeilisearchMCPServer:
                     },
                 ),
                 types.Tool(
-                    name="apply-template",
-                    description="Apply a predefined configuration template",
-                    inputSchema={
-                        "type": "object",
-                        "properties": {
-                            "indexUid": {"type": "string"},
-                            "template": {
-                                "type": "string",
-                                "enum": ["ecommerce", "content_search", "saas_app"],
-                            },
-                        },
-                        "required": ["indexUid", "template"],
-                    },
-                ),
-                types.Tool(
                     name="get-task",
                     description="Get information about a specific task",
                     inputSchema={
@@ -366,29 +351,6 @@ class MeilisearchMCPServer:
                     return [
                         types.TextContent(
                             type="text", text=f"Settings updated: {result}"
-                        )
-                    ]
-
-                elif name == "apply-template":
-                    template_name = arguments["template"]
-                    template = None
-
-                    if template_name == "ecommerce":
-                        template = self.meili_client.templates.ecommerce()
-                    elif template_name == "content_search":
-                        template = self.meili_client.templates.content_search()
-                    elif template_name == "saas_app":
-                        template = self.meili_client.templates.saas_app()
-                    else:
-                        raise ValueError(f"Unknown template: {template_name}")
-
-                    result = await self.meili_client.settings.update_settings(
-                        arguments["indexUid"], template
-                    )
-                    return [
-                        types.TextContent(
-                            type="text",
-                            text=f"Applied {template_name} template: {result}",
                         )
                     ]
 
