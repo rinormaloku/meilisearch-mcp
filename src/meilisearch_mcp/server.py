@@ -158,6 +158,22 @@ class MeilisearchMCPServer:
                     },
                 ),
                 types.Tool(
+                    name="search",
+                    description="Search through Meilisearch indices. If indexUid is not provided, it will search across all indices.",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "query": {"type": "string"},
+                            "indexUid": {"type": "string", "optional": True},
+                            "limit": {"type": "integer", "optional": True},
+                            "offset": {"type": "integer", "optional": True},
+                            "filter": {"type": "string", "optional": True},
+                            "sort": {"type": "array", "items": {"type": "string"}, "optional": True},
+                        },
+                        "required": ["query"],
+                    },
+                ),
+                types.Tool(
                     name="get-task",
                     description="Get information about a specific task",
                     inputSchema={
@@ -351,6 +367,25 @@ class MeilisearchMCPServer:
                     return [
                         types.TextContent(
                             type="text", text=f"Settings updated: {result}"
+                        )
+                    ]
+
+                elif name == "search":
+                    search_results = await self.meili_client.search(
+                        query=arguments["query"],
+                        index_uid=arguments.get("indexUid"),
+                        limit=arguments.get("limit"),
+                        offset=arguments.get("offset"),
+                        filter=arguments.get("filter"),
+                        sort=arguments.get("sort"),
+                    )
+                    
+                    # Format the results for better readability
+                    formatted_results = json.dumps(search_results, indent=2, default=json_serializer)
+                    return [
+                        types.TextContent(
+                            type="text",
+                            text=f"Search results for '{arguments['query']}':\n{formatted_results}"
                         )
                     ]
 
