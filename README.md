@@ -116,13 +116,42 @@ npx @modelcontextprotocol/inspector python -m src.meilisearch_mcp
 
 ## Available Tools
 
-- Index Management: create/update/delete indexes
-- Document Operations: add/update/delete documents
-- Settings Management: configure search settings
-- API Key Management: create/update/delete API keys
-- Task Monitoring: track and manage asynchronous tasks
-- System Monitoring: health checks and metrics
-- Search: flexible search across single or multiple indices
+### Connection Management
+- `get-connection-settings`: View current Meilisearch connection URL and API key status
+- `update-connection-settings`: Update URL and/or API key to connect to a different instance
+
+### Index Management
+- `create-index`: Create a new index with optional primary key
+- `list-indexes`: List all available indexes
+- `get-index-metrics`: Get detailed metrics for a specific index
+
+### Document Operations
+- `get-documents`: Retrieve documents from an index with pagination
+- `add-documents`: Add or update documents in an index
+
+### Search
+- `search`: Flexible search across single or multiple indices with filtering and sorting options
+
+### Settings Management
+- `get-settings`: View current settings for an index
+- `update-settings`: Update index settings (ranking, faceting, etc.)
+
+### API Key Management
+- `get-keys`: List all API keys
+- `create-key`: Create new API key with specific permissions
+- `delete-key`: Delete an existing API key
+
+### Task Management
+- `get-task`: Get information about a specific task
+- `get-tasks`: List tasks with optional filters
+- `cancel-tasks`: Cancel pending or enqueued tasks
+
+### System Monitoring
+- `health-check`: Basic health check
+- `get-health-status`: Comprehensive health status
+- `get-version`: Get Meilisearch version information
+- `get-stats`: Get database statistics
+- `get-system-info`: Get system-level information
 
 ## Contributing
 
