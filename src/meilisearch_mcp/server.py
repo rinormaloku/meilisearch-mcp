@@ -188,13 +188,23 @@ class MeilisearchMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "indexUids": {"type": "string", "optional": True},
-                            "types": {"type": "string", "optional": True},
-                            "statuses": {"type": "string", "optional": True},
-                            "from": {"type": "integer", "optional": True},
                             "limit": {"type": "integer", "optional": True},
-                        },
-                    },
+                            "from": {"type": "integer", "optional": True},
+                            "reverse": {"type": "boolean", "optional": True},
+                            "batchUids": {"type": "array", "items": {"type": "string"}, "optional": True},
+                            "uids": {"type": "array", "items": {"type": "integer"}, "optional": True},
+                            "canceledBy": {"type": "array", "items": {"type": "string"}, "optional": True},
+                            "types": {"type": "array", "items": {"type": "string"}, "optional": True},
+                            "statuses": {"type": "array", "items": {"type": "string"}, "optional": True},
+                            "indexUids": {"type": "array", "items": {"type": "string"}, "optional": True},
+                            "afterEnqueuedAt": {"type": "string", "optional": True},
+                            "beforeEnqueuedAt": {"type": "string", "optional": True},
+                            "afterStartedAt": {"type": "string", "optional": True},
+                            "beforeStartedAt": {"type": "string", "optional": True},
+                            "afterFinishedAt": {"type": "string", "optional": True},
+                            "beforeFinishedAt": {"type": "string", "optional": True}
+                        }
+                    }
                 ),
                 types.Tool(
                     name="cancel-tasks",
@@ -396,7 +406,14 @@ class MeilisearchMCPServer:
                     ]
 
                 elif name == "get-tasks":
-                    tasks = await self.meili_client.tasks.get_tasks(arguments)
+                    # Filter out any invalid parameters
+                    valid_params = {
+                        "limit", "from", "reverse", "batchUids", "uids", "canceledBy",
+                        "types", "statuses", "indexUids", "afterEnqueuedAt", "beforeEnqueuedAt",
+                        "afterStartedAt", "beforeStartedAt", "afterFinishedAt", "beforeFinishedAt"
+                    }
+                    filtered_args = {k: v for k, v in arguments.items() if k in valid_params} if arguments else {}
+                    tasks = await self.meili_client.tasks.get_tasks(filtered_args)
                     return [types.TextContent(type="text", text=f"Tasks: {tasks}")]
 
                 elif name == "cancel-tasks":
