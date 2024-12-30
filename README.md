@@ -156,8 +156,21 @@ npx @modelcontextprotocol/inspector python -m src.meilisearch_mcp
 
 ### Task Management
 - `get-task`: Get information about a specific task
-- `get-tasks`: List tasks with optional filters
+- `get-tasks`: List tasks with optional filters:
+  - `limit`: Maximum number of tasks to return
+  - `from`: Number of tasks to skip
+  - `reverse`: Sort order of tasks
+  - `batchUids`: Filter by batch UIDs
+  - `uids`: Filter by task UIDs
+  - `canceledBy`: Filter by cancellation source
+  - `types`: Filter by task types
+  - `statuses`: Filter by task statuses
+  - `indexUids`: Filter by index UIDs
+  - `afterEnqueuedAt`/`beforeEnqueuedAt`: Filter by enqueue time
+  - `afterStartedAt`/`beforeStartedAt`: Filter by start time
+  - `afterFinishedAt`/`beforeFinishedAt`: Filter by finish time
 - `cancel-tasks`: Cancel pending or enqueued tasks
+- `delete-tasks`: Delete completed tasks
 
 ### System Monitoring
 - `health-check`: Basic health check
