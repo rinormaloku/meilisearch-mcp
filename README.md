@@ -108,6 +108,19 @@ Available search parameters:
 python -m src.meilisearch_mcp
 ```
 
+### Usage with Claude Desktop
+To use this with Claude Desktop, add the following to your `claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "meilisearch": {
+      "command": "uvx",
+      "args": ["-n", "meilisearch-mcp"]
+    }
+  }
+}
+```
+
 ### Testing with MCP Inspector
 
 ```bash
