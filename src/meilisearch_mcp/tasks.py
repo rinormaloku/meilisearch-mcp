@@ -1,10 +1,6 @@
 from typing import Dict, Any, List, Optional
 from meilisearch import Client
-from .logging import MCPLogger
-import json
 from datetime import datetime
-
-logger = MCPLogger()
 
 
 def serialize_task_results(obj: Any) -> Any:
@@ -19,9 +15,8 @@ def serialize_task_results(obj: Any) -> Any:
 
 
 class TaskManager:
-    """Manage Meilisearch tasks"""
-
     def __init__(self, client: Client):
+        """Initialize TaskManager with Meilisearch client"""
         self.client = client
 
     async def get_task(self, task_uid: int) -> Dict[str, Any]:
@@ -37,26 +32,9 @@ class TaskManager:
     ) -> Dict[str, Any]:
         """Get list of tasks with optional filters"""
         try:
-            logger.info(
-                "Getting tasks with parameters",
-                parameters=parameters,
-                client_config={
-                    "url": self.client.config.url,
-                    "api_key_present": bool(self.client.config.api_key),
-                }
-            )
             tasks = self.client.get_tasks(parameters)
             return serialize_task_results(tasks)
         except Exception as e:
-            logger.error(
-                "Failed to get tasks",
-                error=str(e),
-                parameters=parameters,
-                client_config={
-                    "url": self.client.config.url,
-                    "api_key_present": bool(self.client.config.api_key),
-                }
-            )
             raise Exception(f"Failed to get tasks: {str(e)}")
 
     async def cancel_tasks(self, query_parameters: Dict[str, Any]) -> Dict[str, Any]:
