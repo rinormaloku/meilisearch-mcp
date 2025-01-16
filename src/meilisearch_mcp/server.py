@@ -497,7 +497,7 @@ class MeilisearchMCPServer:
 
     async def run(self):
         """Run the MCP server"""
-        logger.info("Starting Meilisearch MCP server...")
+        logger.info("Starting Meilisearch UPD MCP server...")
 
         async with mcp.server.stdio.stdio_server() as (read_stream, write_stream):
             await self.server.run(
