@@ -130,7 +130,7 @@ class MeilisearchMCPServer:
                         "type": "object",
                         "properties": {
                             "indexUid": {"type": "string"},
-                            "documents": {"type": "array"},
+                            "documents": {"type": "array", "items": {"type": "string"}},
                             "primaryKey": {"type": "string", "optional": True},
                         },
                         "required": ["indexUid", "documents"],
