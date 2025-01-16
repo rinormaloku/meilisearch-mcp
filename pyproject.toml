@@ -1,6 +1,6 @@
 [project]
 name = "meilisearch-mcp-upd"
-version = "0.5.1"
+version = "0.5.2"
 description = "MCP server for Meilisearch"
 requires-python = ">=3.10"
 dependencies = [
@@ -15,7 +15,7 @@ requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
 
 [project.scripts]
-meilisearch-mcp = "meilisearch_mcp.server:main"
+meilisearch-mcp-upd = "meilisearch_mcp.server:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/meilisearch_mcp"]
