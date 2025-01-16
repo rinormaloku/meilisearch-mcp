@@ -1,6 +1,6 @@
 [project]
-name = "meilisearch-mcp"
-version = "0.4.1"
+name = "meilisearch-mcp-upd"
+version = "0.5.1"
 description = "MCP server for Meilisearch"
 requires-python = ">=3.10"
 dependencies = [
