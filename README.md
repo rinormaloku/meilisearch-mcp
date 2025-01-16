@@ -6,7 +6,7 @@ A Model Context Protocol (MCP) server for interacting with Meilisearch through L
 
 ## Features
 
-- Index and document management 
+- Index and document management
 - Settings configuration and management
 - Task monitoring and API key management
 - Built-in logging and monitoring tools
@@ -37,8 +37,8 @@ uv pip install -e .
 ### Environment Variables
 
 ```bash
-MEILI_HTTP_ADDR=http://localhost:7700  # Default Meilisearch URL
-MEILI_MASTER_KEY=your_master_key       # Optional: Default Meilisearch API key
+export MEILI_HTTP_ADDR=http://localhost:7700  # Default Meilisearch URL
+export MEILI_MASTER_KEY=your_master_key       # Optional: Default Meilisearch API key
 ```
 
 ### Dynamic Connection Configuration
