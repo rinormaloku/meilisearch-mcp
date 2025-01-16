@@ -51,7 +51,7 @@ class MeilisearchMCPServer:
             self.url = url
         if api_key:
             self.api_key = api_key
-        
+
         self.meili_client = MeilisearchClient(self.url, self.api_key)
         self.logger.info("Updated Meilisearch connection settings", url=self.url)
 
@@ -130,7 +130,7 @@ class MeilisearchMCPServer:
                         "type": "object",
                         "properties": {
                             "indexUid": {"type": "string"},
-                            "documents": {"type": "array", "items": {"type": "string"}},
+                            "documents": {"type": "array", "items": {"type": "object"}},
                             "primaryKey": {"type": "string", "optional": True},
                         },
                         "required": ["indexUid", "documents"],
@@ -228,20 +228,6 @@ class MeilisearchMCPServer:
                             "offset": {"type": "integer", "optional": True},
                             "limit": {"type": "integer", "optional": True},
                         },
-                    },
-                ),
-                types.Tool(
-                    name="create-key",
-                    description="Create a new API key",
-                    inputSchema={
-                        "type": "object",
-                        "properties": {
-                            "description": {"type": "string", "optional": True},
-                            "actions": {"type": "array"},
-                            "indexes": {"type": "array"},
-                            "expiresAt": {"type": "string", "optional": True},
-                        },
-                        "required": ["actions", "indexes"],
                     },
                 ),
                 types.Tool(
@@ -389,7 +375,7 @@ class MeilisearchMCPServer:
                         filter=arguments.get("filter"),
                         sort=arguments.get("sort"),
                     )
-                    
+
                     # Format the results for better readability
                     formatted_results = json.dumps(search_results, indent=2, default=json_serializer)
                     return [
@@ -427,19 +413,6 @@ class MeilisearchMCPServer:
                 elif name == "get-keys":
                     keys = await self.meili_client.keys.get_keys(arguments)
                     return [types.TextContent(type="text", text=f"API keys: {keys}")]
-
-                elif name == "create-key":
-                    key = await self.meili_client.keys.create_key(
-                        {
-                            "description": arguments.get("description"),
-                            "actions": arguments["actions"],
-                            "indexes": arguments["indexes"],
-                            "expiresAt": arguments.get("expiresAt"),
-                        }
-                    )
-                    return [
-                        types.TextContent(type="text", text=f"Created API key: {key}")
-                    ]
 
                 elif name == "delete-key":
                     await self.meili_client.keys.delete_key(arguments["key"])
@@ -522,7 +495,7 @@ def main():
     """Main entry point"""
     url = os.getenv("MEILI_HTTP_ADDR", "http://localhost:7700")
     api_key = os.getenv("MEILI_MASTER_KEY")
-    
+
     server = create_server(url, api_key)
     asyncio.run(server.run())
 
